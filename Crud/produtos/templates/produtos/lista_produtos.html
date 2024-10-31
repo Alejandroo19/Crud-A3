@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Meu Estoque</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 </head>
 <body>
     <div class="container">
@@ -16,7 +16,7 @@
                 <input type="text" name="query" placeholder="Procurar" id="procurar">
                 <button type="submit">Buscar</button>
             </form>
-            <button onclick="location.href='{% url 'cadastrar_produto' %}'">Cadastrar Produto</button>
+            <button onclick="location.href='{% url 'cadastrar_produto' %}'"class="btn btn-secondary rounded-pill px-3" type="button">Cadastrar Produto</button>
         </div>
 
         <div class="produtos-lista">
