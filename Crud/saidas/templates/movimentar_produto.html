@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimentar Produto</title>
+</head>
+<body>
+    <h2>Movimentar Produto</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar Movimentação</button>
+    </form>
+</body>
+</html>

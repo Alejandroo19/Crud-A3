@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Estoque</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Meu Estoque</h2>
+        <p>Você tem produtos com estoque baixo. <a href="{% url 'ver_estoque_baixo' %}">Ver</a></p>
+
+        <div class="opcoes">
+            <form method="GET" action="{% url 'procurar_produto' %}">
+                <input type="text" name="query" placeholder="Procurar" id="procurar">
+                <button type="submit">Buscar</button>
+            </form>
+            <button onclick="location.href='{% url 'cadastrar_produto' %}'">Cadastrar Produto</button>
+        </div>
+
+        <div class="produtos-lista">
+            {% for produto in produtos %}
+            <div class="produto-item">
+                <p>Nome: {{ produto.nome }}</p>
+                <p>Quantidade: {{ produto.quantidade }}</p>
+                <p>Categoria: {{ produto.categoria.nome }}</p>
+                <p>R$ {{ produto.preco }}</p>
+                <a href="{% url 'movimentar_produto' produto.id %}">Movimentar</a>
+                <a href="{% url 'editar_produto' produto.id %}">Editar</a>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</body>
+</html>
