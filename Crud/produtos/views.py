@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Produto, Categoria
 from .forms import ProdutoForm
+from .models import Categoria, Movimentacao
 
 # Listar produtos
 def lista_produtos(request):
@@ -43,3 +44,11 @@ def editar_produto(request, produto_id):
         form = ProdutoForm(instance=produto)
     
     return render(request, 'produtos/editar_produto.html', {'form': form, 'produto': produto})
+
+def gerenciar_categorias(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'produtos/gerenciar_categorias.html', {'categorias': categorias})
+
+def historico_movimentacao(request):
+    movimentacoes = Movimentacao.objects.all()
+    return render(request, 'produtos/historico_movimentacao.html', {'movimentacoes': movimentacoes})

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Histórico de Movimentações</h2>
+    
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Supondo que você tenha uma variável "movimentacoes" passada pelo contexto -->
+            {% for movimentacao in movimentacoes %}
+            <tr>
+                <td>{{ movimentacao.data }}</td>
+                <td>{{ movimentacao.produto.nome }}</td>
+                <td>{{ movimentacao.tipo }}</td>
+                <td>{{ movimentacao.quantidade }}</td>
+                <td>{{ movimentacao.usuario }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

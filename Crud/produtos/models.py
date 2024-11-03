@@ -15,3 +15,13 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class Movimentacao(models.Model):
+    # Defina os campos do modelo Movimentacao de acordo com as suas necessidades
+    tipo = models.CharField(max_length=50)  # Por exemplo, entrada ou saída
+    quantidade = models.PositiveIntegerField()
+    data = models.DateTimeField(auto_now_add=True)
+    # Outros campos que você precisar
+
+    def __str__(self):
+        return f"{self.tipo} - {self.quantidade}"
