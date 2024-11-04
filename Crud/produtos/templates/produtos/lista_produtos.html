@@ -1,63 +1,135 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Meu Estoque</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-</head>
-<!-- JS do Bootstrap 5 -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7/zsBVD4lDxUMFsO0ZAx2po3KiFgt/qP+7A3si33aBr0g5n1Y5tG+hEz7OcTF1y4" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kaLma0D0Mh4DQ8QjsAh8eeWoRERJUt6R9iZbGxnpRzB1xNaOZw5XZv3C1xdFQ4f0" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h2>Meu Estoque</h2>
-        <p>Você tem produtos com estoque baixo. <a href="{% url 'ver_estoque_baixo' %}">Ver</a></p>
+      <h2>Meu Estoque</h2>
+      <p>
+        Você tem produtos com estoque baixo.
+        <a href="{% url 'ver_estoque_baixo' %}">Ver</a>
+      </p>
 
-        <div class="opcoes">
-            <form method="GET" action="{% url 'procurar_produto' %}">
-                <input type="text" name="query" placeholder="Procurar" id="procurar">
-                <button type="submit">Buscar</button>
-            </form>
-            <button onclick="location.href='{% url 'cadastrar_produto' %}'"class="btn btn-secondary rounded-pill px-3" type="button">Cadastrar Produto</button>
-            <!-- Botão Mais para abrir o modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#maisModal">Mais</button>
+      <div class="opcoes">
+        <form method="GET" action="{% url 'procurar_produto' %}">
+          <input
+            type="text"
+            name="query"
+            placeholder="Procurar"
+            id="procurar"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+
+        {% if messages %}
+        <h1>ddd</h1>
+        <div class="alert alert-info mt-3">
+          {% for message in messages %}
+          <p>{{ message }}</p>
+          {% endfor %}
         </div>
-        <!-- Modal Mais Opções -->
-<div class="modal fade" id="maisModal" tabindex="-1" aria-labelledby="maisModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        {% endif %}
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#cadastrarProdutoModal"
+        >
+          Cadastrar produto
+        </button>
+
+        <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Cadastrar Produto</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form method="post" action="{% url 'cadastrar_produto' %}">
+                  {% csrf_token %} {{ form.as_p }}
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                      Cadastrar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botão Mais para abrir o modal -->
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#maisModal"
+        >
+          Mais
+        </button>
+      </div>
+      <!-- Modal Mais Opções -->
+      <div class="modal fade" tabindex="-1" id="maisModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="maisModalLabel">Mais Opções</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title">Modal title</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-outline-secondary w-100 mb-2" onclick="window.location.href='{% url 'gerenciar_categorias' %}'">
-                    Gerenciar Categorias
-                </button>
-                <button type="button" class="btn btn-outline-secondary w-100" onclick="window.location.href='{% url 'historico_movimentacao' %}'">
-                    Histórico de Movimentações
-                </button>
+              <p>Modal body text goes here.</p>
             </div>
-        </div>
-    </div>
-</div>
-
-
-        <div class="produtos-lista">
-            {% for produto in produtos %}
-            <div class="produto-item">
-                <p>Nome: {{ produto.nome }}</p>
-                <p>Quantidade: {{ produto.quantidade }}</p>
-                <p>Categoria: {{ produto.categoria.nome }}</p>
-                <p>R$ {{ produto.preco }}</p>
-                <a href="{% url 'movimentar_produto' produto.id %}">Movimentar</a>
-                <a href="{% url 'editar_produto' produto.id %}">Editar</a>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
             </div>
-            {% endfor %}
+          </div>
         </div>
-        
+      </div>
+
+      <div class="produtos-lista">
+        {% for produto in produtos %}
+        <div class="produto-item">
+          <p>Nome: {{ produto.nome }}</p>
+          <p>Quantidade: {{ produto.quantidade }}</p>
+          <p>Categoria: {{ produto.categoria.nome }}</p>
+          <p>R$ {{ produto.preco }}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-</body>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+  </body>
 </html>

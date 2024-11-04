@@ -2,12 +2,24 @@ from django.shortcuts import render, redirect
 from .models import Produto, Categoria
 from .forms import ProdutoForm
 from .models import Categoria, Movimentacao
+from django.contrib import messages 
 
 # Listar produtos
 def lista_produtos(request):
     produtos = Produto.objects.all()
-    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos})
+    
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Produto cadastrado com sucesso!')
+            return redirect('lista_produtos')
+        else:
+            messages.error(request, 'Erro ao cadastrar produto. Verifique os dados informados.')
+    else:
+        form = ProdutoForm()
 
+    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos, 'form': form})
 # Cadastrar produto
 def cadastrar_produto(request):
     if request.method == 'POST':
@@ -17,7 +29,7 @@ def cadastrar_produto(request):
             return redirect('lista_produtos')
     else:
         form = ProdutoForm()
-    return render(request, 'produtos/cadastrar_produto.html', {'form': form})
+    return render(request, 'produtos/lista_produtos.html', {'form': form})
 
 # Ver produtos com estoque baixo
 def ver_estoque_baixo(request):
