@@ -15,6 +15,7 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome
+        
     
 class Movimentacao(models.Model):
     # Defina os campos do modelo Movimentacao de acordo com as suas necessidades
