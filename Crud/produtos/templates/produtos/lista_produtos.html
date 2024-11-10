@@ -9,109 +9,97 @@
 
   <body>
     <div class="container">
-      <h2>Meu Estoque</h2>
-      <p>
-        Você tem produtos com estoque baixo.
-        <a href="{% url 'ver_estoque_baixo' %}">Ver</a>
-      </p>
+      <!-- Cabeçalho da Página -->
+      <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+          <h2>Meu Estoque</h2>
+          <p>
+            Você tem produtos com estoque baixo.
+            <a href="{% url 'ver_estoque_baixo' %}">Ver</a>
+          </p>
+        </div>
+        <div class="col-md-6 text-end">
+          <!-- Campo de Busca -->
+          <form method="GET" action="{% url 'procurar_produto' %}" class="d-inline-block">
+            <input
+              type="text"
+              name="query"
+              class="form-control d-inline-block me-2"
+              placeholder="Procurar"
+              id="procurar"
+            />
+            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+          </form>
 
-      <div class="opcoes">
-        <form method="GET" action="{% url 'procurar_produto' %}">
-          <input
-            type="text"
-            name="query"
-            placeholder="Procurar"
-            id="procurar"
-          />
-          <button type="submit">Buscar</button>
-        </form>
-
-        {% if messages %}
-        <h1>ddd</h1>
-        <div class="alert alert-info mt-3">
-          {% for message in messages %}
-          <p>{{ message }}</p>
-          {% endfor %}
+          <!-- Botões Cadastrar Produto e Mais -->
+          <button
+            type="button"
+            class="btn btn-outline-secondary ms-2"
+            data-bs-toggle="modal"
+            data-bs-target="#cadastrarProdutoModal"
+          >
+            Cadastrar Produto
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary ms-2"
+            data-bs-toggle="modal"
+            data-bs-target="#maisModal"
+          >
+            Mais
+          </button>
         </div>
-        {% endif %}
-
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-toggle="modal"
-          data-bs-target="#cadastrarProdutoModal"
-        >
-          Cadastrar produto
-        </button>
-
-        <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Cadastrar Produto</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form method="post" action="{% url 'cadastrar_produto' %}">
-                  {% csrf_token %} 
-                 
-        <div class="mb-3">
-            <label for="id_nome" class="form-label">Nome</label>
-            {{ form.nome }}
-        </div>
-        <div class="mb-3">
-            <label for="id_categoria" class="form-label">Categoria</label>
-            {{ form.categoria }}
-        </div>
-        <div class="mb-3">
-            <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
-            {{ form.quantidade_minima }}
-        </div>
-        <div class="mb-3 col-sm-4">
-            <label for="id_preco" class="form-label">Preço</label>
-            <input type="number" step="0.01" name="preco" id="id_preco" min="0" class="form-control" required>
-        </div>
-        
-            
-                  <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">
-                      Cadastrar
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Botão Mais para abrir o modal -->
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-toggle="modal"
-          data-bs-target="#maisModal"
-        >
-          Mais
-        </button>
       </div>
+
+      <!-- Modal Cadastrar Produto -->
+      <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastrar Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'cadastrar_produto' %}">
+                        {% csrf_token %}
+                        <div class="mb-3 col-sm-6">
+                            <label for="id_nome" class="form-label">Nome</label>
+                            {{ form.nome }}
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label for="id_categoria" class="form-label">Categoria</label>
+                            <select name="categoria" id="id_categoria" class="form-control" required>
+                                <option value="">-- Selecione uma Categoria --</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
+                            {{ form.quantidade_minima }}
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label for="id_preco" class="form-label">Preço</label>
+                            <input type="number" step="0.01" name="preco" id="id_preco" min="0" class="form-control" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
       <!-- Modal Mais Opções -->
       <div class="modal fade" tabindex="-1" id="maisModal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
+              <h5 class="modal-title">Mais Opções</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -119,32 +107,28 @@
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
-              <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" class="btn btn-primary">
-                Save changes
-              </button>
+            <div class="modal-body text-center">
+              <!-- Botão Gerenciar Categorias -->
+              <a href="{% url 'gerenciar_categorias' %}" class="btn btn-outline-secondary w-100 my-2">
+                Gerenciar Categorias
+              </a>
+              <!-- Botão Histórico de Movimentações -->
+              <a href="{% url 'historico_movimentacoes' %}" class="btn btn-outline-secondary w-100 my-2">
+                Histórico de Movimentações
+              </a>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Lista de Produtos -->
       <div class="produtos-lista">
         {% for produto in produtos %}
-        <div class="produto-item">
-          <p>Nome: {{ produto.nome }}</p>
-          <p>Quantidade: {{ produto.quantidade }}</p>
-          <p>Categoria: {{ produto.categoria.nome }}</p>
-          <p>R$ {{ produto.preco }}</p>
+        <div class="produto-item mb-3 p-3 border rounded">
+          <p><strong>Nome:</strong> {{ produto.nome }}</p>
+          <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+          <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
+          <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
         </div>
         {% endfor %}
       </div>

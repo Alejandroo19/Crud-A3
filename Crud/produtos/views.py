@@ -1,13 +1,14 @@
+# views.py
 from django.shortcuts import render, redirect
 from .models import Produto, Categoria
 from .forms import ProdutoForm
-from .models import Categoria, Movimentacao
 from django.contrib import messages 
 
-# Listar produtos
+# Listar produtos e cadastrar novo produto
 def lista_produtos(request):
     produtos = Produto.objects.all()
-    
+    categorias = Categoria.objects.all()  # Obtendo todas as categorias disponíveis
+
     if request.method == 'POST':
         form = ProdutoForm(request.POST)
         if form.is_valid():
@@ -18,6 +19,10 @@ def lista_produtos(request):
             messages.error(request, 'Erro ao cadastrar produto. Verifique os dados informados.')
     else:
         form = ProdutoForm()
+
+    # Passando as categorias para o contexto do template
+    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos, 'form': form, 'categorias': categorias})
+
 
     return render(request, 'produtos/lista_produtos.html', {'produtos': produtos, 'form': form})
 # Cadastrar produto
@@ -61,6 +66,6 @@ def gerenciar_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'produtos/gerenciar_categorias.html', {'categorias': categorias})
 
-def historico_movimentacao(request):
-    movimentacoes = Movimentacao.objects.all()
-    return render(request, 'produtos/historico_movimentacao.html', {'movimentacoes': movimentacoes})
+def historico_movimentacoes(request):
+    movimentacoes = movimentacoes.objects.all()
+    return render(request, 'produtos/historico_movimentacoes.html', {'movimentacoes': movimentacoes})   

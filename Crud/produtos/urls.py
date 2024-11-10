@@ -7,7 +7,7 @@ urlpatterns = [
     path('estoque_baixo/', views.ver_estoque_baixo, name='ver_estoque_baixo'),
     path('procurar/', views.procurar_produto, name='procurar_produto'),
     path('gerenciar_categorias/', views.gerenciar_categorias,name='gerenciar_categorias'),
-    path('historico_movimentacao/', views.historico_movimentacao, name='historico_movimentacao'),
+    path('historico_movimentacoes/', views.historico_movimentacoes, name='historico_movimentacoes'),
 
 ]
 
