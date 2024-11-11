@@ -97,11 +97,13 @@ Certifique-se de que o servidor MySQL está rodando antes de iniciar o projeto.
 
 Todas as dependências necessárias estão listadas no arquivo requirements.txt.
 
-  - Funcionalidades Futuras
+  ### Funcionalidades Futuras
 
-Melhorar a interface para gerenciamento de movimentações de estoque.
+- A proxima grande funcionalidade para ser implementada vai ser a autenticação de usuarios, cada pessoa vai que for utilizar o sistema poderá cadastrar seu próprio usuario.
 
-Implementar relatórios mais detalhados com visualizações gráficas.
+- Melhorar a interface para gerenciamento de movimentações de estoque.
+
+- Implementar relatórios mais detalhados com visualizações gráficas.
 
 Se precisar de ajuda ou tiver sugestões, fique à vontade para abrir uma issue no repositório. Espero que você goste do projeto!
 
