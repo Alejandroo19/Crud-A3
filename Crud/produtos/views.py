@@ -69,3 +69,28 @@ def gerenciar_categorias(request):
 def historico_movimentacoes(request):
     movimentacoes = movimentacoes.objects.all()
     return render(request, 'produtos/historico_movimentacoes.html', {'movimentacoes': movimentacoes})   
+
+# View para gerenciar categorias (cadastrar, editar e excluir)
+def gerenciar_categorias(request):
+    if request.method == 'POST' and 'categoria_nome' in request.POST:
+        # Cadastro de nova categoria
+        nome = request.POST.get('categoria_nome')
+        Categoria.objects.create(nome=nome)
+        return redirect('gerenciar_categorias')
+    
+    categorias = Categoria.objects.all()
+    return render(request, 'produtos/gerenciar_categorias.html', {'categorias': categorias})
+
+def editar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    if request.method == 'POST':
+        nome = request.POST.get('categoria_nome')
+        categoria.nome = nome
+        categoria.save()
+        return redirect('gerenciar_categorias')
+
+def deletar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    if request.method == 'POST':
+        categoria.delete()
+        return redirect('gerenciar_categorias')
