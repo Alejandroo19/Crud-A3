@@ -4,7 +4,7 @@ Gerenciamento de Estoque - Projeto Django
 
 Este projeto é um sistema de gerenciamento de estoque desenvolvido com Django e MySQL. O sistema permite o controle de produtos, movimentação de estoque (entradas e saídas), categorias de produtos e muito mais. Além disso, é possível realizar o cadastro, edição, e exclusão de produtos e categorias, tudo a partir de uma interface amigável e responsiva.
 
-O sistema possui as seguintes funcionalidades:
+**O sistema possui as seguintes funcionalidades:**
 
   - Cadastro, edição e exclusão de produtos.
 
@@ -28,7 +28,7 @@ Requisitos
 
   - Git
 
-Passos para Instalação
+**Passos para Instalação**
 
   Clone o repositório:
 
@@ -47,19 +47,19 @@ No Windows:
       python -m venv venv
       venv\Scripts\activate
 
-Instale as dependências do projeto:
+**Instale as dependências do projeto:**
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
-Configurar o banco de dados:
+**Configurar o banco de dados:**
 
 Crie um banco de dados no MySQL:
 
-CREATE DATABASE gerenciamento_estoque;
+    CREATE DATABASE gerenciamento_estoque;
 
 Atualize as configurações do banco de dados no arquivo settings.py do Django:
 
-DATABASES = {
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gerenciamento_estoque',
@@ -68,22 +68,22 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
     }
-}
+    }
 
 Execute as migrações:
 
-python manage.py makemigrations
-python manage.py migrate
+    python manage.py makemigrations
+    python manage.py migrate
 
 Crie um superusuário para acessar o admin do Django:
 
-python manage.py createsuperuser
+    python manage.py createsuperuser
 
 Siga as instruções para definir um nome de usuário, e-mail e senha.
 
-Inicie o servidor:
+**Inicie o servidor:**
 
-python manage.py runserver
+    python manage.py runserver
 
 O servidor será iniciado e o sistema poderá ser acessado em http://127.0.0.1:8000/.
 
@@ -91,13 +91,13 @@ Acesse a interface de administração do Django (opcional):
 
 Acesse http://127.0.0.1:8000/admin/ e faça login com o superusuário criado.
 
-Considerações
+  - Considerações
 
 Certifique-se de que o servidor MySQL está rodando antes de iniciar o projeto.
 
 Todas as dependências necessárias estão listadas no arquivo requirements.txt.
 
-Funcionalidades Futuras
+  - Funcionalidades Futuras
 
 Melhorar a interface para gerenciamento de movimentações de estoque.
 
