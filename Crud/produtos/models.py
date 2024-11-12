@@ -2,10 +2,11 @@ from django.db import models
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=30)
+    ativo = models.BooleanField(default=True)  # Novo campo para indicar se a categoria está ativa
 
     def __str__(self):
         return self.nome
-
+    
 class Produto(models.Model):
     nome = models.CharField(max_length=60)
     quantidade = models.PositiveIntegerField(default=0, editable=False)

@@ -4,13 +4,17 @@ from .models import Produto, Categoria
 from .forms import ProdutoForm
 from django.contrib import messages 
 
-# Listar produtos e cadastrar novo produto
 def lista_produtos(request):
     produtos = Produto.objects.all()
-    categorias = Categoria.objects.all()  # Obtendo todas as categorias disponíveis
+    categorias_ativas = Categoria.objects.filter(ativo=True)
+
+    # Debug - Verificar categorias ativas
+    print("Categorias ativas (na view):", categorias_ativas)
 
     if request.method == 'POST':
         form = ProdutoForm(request.POST)
+        # Atualizar o queryset do campo categoria para apenas categorias ativas
+        form.fields['categoria'].queryset = categorias_ativas
         if form.is_valid():
             form.save()
             messages.success(request, 'Produto cadastrado com sucesso!')
@@ -19,12 +23,14 @@ def lista_produtos(request):
             messages.error(request, 'Erro ao cadastrar produto. Verifique os dados informados.')
     else:
         form = ProdutoForm()
+        # Atualizar o queryset do campo categoria para apenas categorias ativas
+        form.fields['categoria'].queryset = categorias_ativas
 
-    # Passando as categorias para o contexto do template
-    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos, 'form': form, 'categorias': categorias})
-
+    # Debug - Verificar o queryset após a atualização
+    print("Updated queryset for categories:", form.fields['categoria'].queryset)
 
     return render(request, 'produtos/lista_produtos.html', {'produtos': produtos, 'form': form})
+
 # Cadastrar produto
 def cadastrar_produto(request):
     if request.method == 'POST':
@@ -94,3 +100,10 @@ def deletar_categoria(request, categoria_id):
     if request.method == 'POST':
         categoria.delete()
         return redirect('gerenciar_categorias')
+    
+    # View para ativar/desativar uma categoria
+def ativar_desativar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    categoria.ativo = not categoria.ativo  # Alterna o status ativo/desativado
+    categoria.save()
+    return redirect('gerenciar_categorias')
