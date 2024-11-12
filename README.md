@@ -99,7 +99,7 @@ Todas as dependências necessárias estão listadas no arquivo requirements.txt.
 
   ### Funcionalidades Futuras
 
-- A proxima grande funcionalidade para ser implementada vai ser a autenticação de usuarios, cada pessoa vai que for utilizar o sistema poderá cadastrar seu próprio usuario.
+- A proxima grande funcionalidade para ser implementada vai ser a autenticação de usuarios, cada pessoa que for utilizar o sistema poderá cadastrar seu próprio usuario.
 
 - Melhorar a interface para gerenciamento de movimentações de estoque.
 
