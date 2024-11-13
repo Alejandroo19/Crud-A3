@@ -1,130 +1,192 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Meu Estoque</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
-  </head>
-
-  <body>
+    <style>
+        .produto-item .left-column {
+            margin-right: 30px; /* Ajustar o espaço entre categoria e botão */
+        }
+        .produto-item .right-column {
+            align-self: flex-start; /* Ajustar posição da quantidade para cima */
+        }
+    </style>
+</head>
+<body>
     <div class="container">
-      <!-- Cabeçalho da Página -->
-      <div class="row align-items-center mb-4">
-        <div class="col-md-6">
-          <h2>Meu Estoque</h2>
-          <p>
-            Você tem produtos com estoque baixo.
-            <a href="{% url 'ver_estoque_baixo' %}">Ver</a>
-          </p>
-        </div>
-        <div class="col-md-6 text-end">
-          <!-- Campo de Busca -->
-          <form method="GET" action="{% url 'procurar_produto' %}" class="d-inline-block">
-            <input
-              type="text"
-              name="query"
-              class="form-control d-inline-block me-2"
-              placeholder="Procurar"
-              id="procurar"
-            />
-            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
-          </form>
+        <!-- Cabeçalho da Página -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6">
+                <h2>Meu Estoque</h2>
+                <p>
+                    Você tem produtos com estoque baixo.
+                    <a href="{% url 'ver_estoque_baixo' %}">Ver</a>
+                </p>
+            </div>
+            <div class="col-md-6 text-end">
+                <!-- Campo de Busca -->
+                <form method="GET" action="{% url 'procurar_produto' %}" class="d-inline-block">
+                    <input
+                        type="text"
+                        name="query"
+                        class="form-control d-inline-block me-2"
+                        placeholder="Procurar"
+                        id="procurar"
+                    />
+                    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+                </form>
 
-          <!-- Botões Cadastrar Produto e Mais -->
-          <button
-            type="button"
-            class="btn btn-outline-secondary ms-2"
-            data-bs-toggle="modal"
-            data-bs-target="#cadastrarProdutoModal"
-          >
-            Cadastrar Produto
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary ms-2"
-            data-bs-toggle="modal"
-            data-bs-target="#maisModal"
-          >
-            Mais
-          </button>
+                <!-- Botões Cadastrar Produto e Mais -->
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary ms-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#cadastrarProdutoModal"
+                >
+                    Cadastrar Produto
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary ms-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#maisModal"
+                >
+                    Mais
+                </button>
+            </div>
         </div>
-      </div>
 
-      <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Cadastrar Produto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Modal Cadastrar Produto -->
+        <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cadastrar Produto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'cadastrar_produto' %}">
+                            {% csrf_token %}
+                            <div class="mb-3 col-sm-6">
+                                <label for="id_nome" class="form-label">Nome</label>
+                                {{ form.nome }}
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label for="id_categoria" class="form-label">Categoria</label>
+                                {{ form.categoria }}
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
+                                {{ form.quantidade_minima }}
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label for="id_preco" class="form-label">Preço</label>
+                                {{ form.preco }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form method="post" action="{% url 'cadastrar_produto' %}">
-                        {% csrf_token %}
-                        <div class="mb-3 col-sm-6">
-                            <label for="id_nome" class="form-label">Nome</label>
-                            {{ form.nome }}
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label for="id_categoria" class="form-label">Categoria</label>
-                            {{ form.categoria }}
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
-                            {{ form.quantidade_minima }}
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label for="id_preco" class="form-label">Preço</label>
-                            {{ form.preco }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
+            </div>
+        </div>
+
+        <!-- Modal Mais Opções -->
+        <div class="modal fade" tabindex="-1" id="maisModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mais Opções</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <!-- Botão Gerenciar Categorias -->
+                        <a href="{% url 'gerenciar_categorias' %}" class="btn btn-outline-secondary w-100 my-2">
+                            Gerenciar Categorias
+                        </a>
+                        <!-- Botão Histórico de Movimentações -->
+                        <a href="{% url 'historico_movimentacoes' %}" class="btn btn-outline-secondary w-100 my-2">
+                            Histórico de Movimentações
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-      <!-- Modal Mais Opções -->
-      <div class="modal fade" tabindex="-1" id="maisModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Mais Opções</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body text-center">
-              <!-- Botão Gerenciar Categorias -->
-              <a href="{% url 'gerenciar_categorias' %}" class="btn btn-outline-secondary w-100 my-2">
-                Gerenciar Categorias
-              </a>
-              <!-- Botão Histórico de Movimentações -->
-              <a href="{% url 'historico_movimentacoes' %}" class="btn btn-outline-secondary w-100 my-2">
-                Histórico de Movimentações
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Lista de Produtos -->
-      <div class="produtos-lista">
-        {% for produto in produtos %}
-        <div class="produto-item mb-3 p-3 border rounded">
-          <p><strong>Nome:</strong> {{ produto.nome }}</p>
-          <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
-          <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
-          <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+        <!-- Lista de Produtos -->
+        <div class="produtos-lista">
+            {% for produto in produtos %}
+            <div class="produto-item mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+                <!-- Informações à esquerda -->
+                <div class="left-column">
+                    <p class="mb-1"><strong>{{ produto.nome }}</strong></p>
+                    <p class="text-muted mb-2">{{ produto.categoria.nome }}</p>
+                    <!-- Botão Editar Produto -->
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editarProdutoModal{{ produto.id }}">
+                        Editar
+                    </button>
+                </div>
+                
+                <!-- Informações à direita -->
+                <div class="right-column text-end">
+                    <p class="mb-1"><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+                    <p class="mb-0"><strong>R$ {{ produto.preco }}</strong></p>
+                </div>
+            </div>
+
+            <!-- Modal Editar Produto -->
+            <div class="modal fade" id="editarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="editarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarProdutoModalLabel{{ produto.id }}">Editar Produto - {{ produto.nome }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="{% url 'editar_produto' produto.id %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="id_nome_{{ produto.id }}" class="form-label">Nome</label>
+                                    <input type="text" class="form-control" id="id_nome_{{ produto.id }}" name="nome" value="{{ produto.nome }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_categoria_{{ produto.id }}" class="form-label">Categoria</label>
+                                    <select name="categoria" id="id_categoria_{{ produto.id }}" class="form-control" required>
+                                        <option value="">-- Selecione uma Categoria --</option>
+                                        {% for categoria in form.fields.categoria.queryset %}
+                                        <option value="{{ categoria.id }}" {% if produto.categoria.id == categoria.id %}selected{% endif %}>{{ categoria.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_quantidade_minima_{{ produto.id }}" class="form-label">Quantidade Mínima</label>
+                                    <input type="number" class="form-control" id="id_quantidade_minima_{{ produto.id }}" name="quantidade_minima" value="{{ produto.quantidade_minima }}" min="0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_preco_{{ produto.id }}" class="form-label">Preço</label>
+                                    <input type="number" class="form-control" id="id_preco_{{ produto.id }}" name="preco" value="{{ produto.preco }}" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-      </div>
     </div>
     <script src="{% static 'js/bootstrap.js' %}"></script>
-  </body>
+</body>
 </html>

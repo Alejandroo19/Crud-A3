@@ -9,7 +9,9 @@ urlpatterns = [
     path('gerenciar_categorias/', views.gerenciar_categorias,name='gerenciar_categorias'),
     path('historico_movimentacoes/', views.historico_movimentacoes, name='historico_movimentacoes'),
     path('editar_categoria/<int:categoria_id>/', views.editar_categoria, name='editar_categoria'),
+    path('deletar_categoria/<int:categoria_id>/', views.deletar_categoria, name='deletar_categoria'),
      path('ativar_desativar_categoria/<int:categoria_id>/', views.ativar_desativar_categoria, name='ativar_desativar_categoria'),
+     path('editar/<int:produto_id>/', views.editar_produto, name='editar_produto'),
 ]
 
 path('editar/<int:produto_id>/', views.editar_produto, name='editar_produto'),
