@@ -75,12 +75,6 @@ Execute as migrações:
     python manage.py makemigrations
     python manage.py migrate
 
-Crie um superusuário para acessar o admin do Django:
-
-    python manage.py createsuperuser
-
-Siga as instruções para definir um nome de usuário, e-mail e senha.
-
 **Inicie o servidor:**
 
     python manage.py runserver
