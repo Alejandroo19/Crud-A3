@@ -73,8 +73,8 @@ def gerenciar_categorias(request):
     return render(request, 'produtos/gerenciar_categorias.html', {'categorias': categorias})
 
 def historico_movimentacoes(request):
-    movimentacoes = movimentacoes.objects.all()
-    return render(request, 'produtos/historico_movimentacoes.html', {'movimentacoes': movimentacoes})   
+    movimentacoes = Movimentacao.objects.all()  # Corrigir para garantir que `movimentacoes` esteja sempre definida.
+    return render(request, 'produtos/historico_movimentacoes.html', {'movimentacoes': movimentacoes})
 
 # View para gerenciar categorias (cadastrar, editar e excluir)
 def gerenciar_categorias(request):

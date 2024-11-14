@@ -18,31 +18,27 @@
 <body>
     <div class="container mt-4">
         <h2>Histórico de Movimentações</h2>
-        <!-- Botão Voltar -->
         <a href="{% url 'lista_produtos' %}" class="btn btn-secondary mb-3">Voltar</a>
-
-        <!-- Lista de Movimentações -->
         <ul class="list-group">
             {% for movimentacao in movimentacoes %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <!-- Tipo da Movimentação -->
-                <span class="badge bg-{{ 'success' if movimentacao.tipo == 'entrada' else 'danger' }}">
+                <span class="badge 
+                    {% if movimentacao.tipo == 'entrada' %}
+                        bg-success
+                    {% else %}
+                        bg-danger
+                    {% endif %}
+                ">
                     {{ movimentacao.tipo|title }}
                 </span>
-                <!-- ID e Nome do Produto -->
-                <span>PID {{ movimentacao.produto.id }} - {{ movimentacao.produto.nome }}</span>
-                <!-- Quantidade Movimentada -->
+                <span>PID {{ movimentacao.produto.codigo }} - {{ movimentacao.produto.nome }}</span>
                 <span>{{ movimentacao.quantidade }} un.</span>
-                <!-- Data da Movimentação -->
                 <span>{{ movimentacao.data|date:"d/m/Y" }}</span>
-            </li>
-            {% empty %}
-            <li class="list-group-item">
-                Nenhuma movimentação encontrada.
             </li>
             {% endfor %}
         </ul>
     </div>
+    
 
     <script src="{% static 'js/bootstrap.js' %}"></script>
 </body>
