@@ -12,6 +12,20 @@
         .produto-item .right-column {
             align-self: flex-start; /* Ajustar posição da quantidade para cima */
         }
+        .product-header {
+              display: flex;
+              align-items: center;
+             gap: 15px; /* Espaçamento entre o nome do produto e o PID */
+        }
+
+        .product-name {
+              margin-bottom: 0;
+        }
+
+        .product-id {
+                 margin-bottom: 0;
+                 font-weight: normal;
+        }
     </style>
 </head>
 <body>
@@ -128,8 +142,13 @@
             <div class="produto-item mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
                 <!-- Informações à esquerda -->
                 <div class="left-column">
-                    <p class="mb-1"><strong>{{ produto.nome }}</strong></p>
-                    <p class="text-muted mb-2">{{ produto.categoria.nome }}</p>
+                  <p class="product-name mb-1"><strong>{{ produto.nome }}</strong></p>
+                  <p class="product-id text-muted mb-1">PID {{ produto.codigo }}</p>
+                  <p class="text-muted mb-2">{{ produto.categoria.nome }}</p>
+                    <!-- Botão Movimentar Produto -->
+                    <button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#movimentarProdutoModal{{ produto.id }}">
+                        Movimentar
+                    </button>
                     <!-- Botão Editar Produto -->
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editarProdutoModal{{ produto.id }}">
                         Editar
@@ -178,6 +197,39 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Salvar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Movimentar Produto -->
+            <div class="modal fade" id="movimentarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="movimentarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="movimentarProdutoModalLabel{{ produto.id }}">Movimentar Produto - {{ produto.nome }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="{% url 'movimentar_produto' produto.id %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="id_operacao_{{ produto.id }}" class="form-label">Operação</label>
+                                    <select name="operacao" id="id_operacao_{{ produto.id }}" class="form-control" required>
+                                        <option value="">Selecione</option>
+                                        <option value="entrada">Entrada</option>
+                                        <option value="saida">Saída</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_quantidade_{{ produto.id }}" class="form-label">Quantidade</label>
+                                    <input type="number" class="form-control" id="id_quantidade_{{ produto.id }}" name="quantidade" min="0" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Movimentar</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                         </form>

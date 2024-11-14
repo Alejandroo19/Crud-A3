@@ -1,6 +1,6 @@
 # views.py
 from django.shortcuts import render, redirect
-from .models import Produto, Categoria
+from .models import Produto, Categoria, Movimentacao
 from .forms import ProdutoForm
 from django.contrib import messages 
 
@@ -107,3 +107,32 @@ def ativar_desativar_categoria(request, categoria_id):
     categoria.ativo = not categoria.ativo  # Alterna o status ativo/desativado
     categoria.save()
     return redirect('gerenciar_categorias')
+
+def movimentar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    if request.method == 'POST':
+        operacao = request.POST.get('operacao')
+        quantidade = int(request.POST.get('quantidade'))
+
+        if operacao == 'entrada':
+            produto.quantidade += quantidade
+            produto.save()
+            messages.success(request, f'Entrada de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
+        elif operacao == 'saida':
+            if produto.quantidade >= quantidade:
+                produto.quantidade -= quantidade
+                produto.save()
+                messages.success(request, f'Saída de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
+            else:
+                messages.error(request, f'Quantidade insuficiente em estoque para realizar a saída do produto {produto.nome}.')
+        else:
+            messages.error(request, 'Operação inválida. Selecione "Entrada" ou "Saída".')
+
+        # Registrar a movimentação
+        Movimentacao.objects.create(
+            tipo=operacao,
+            quantidade=quantidade,
+            produto=produto
+        )
+
+    return redirect('lista_produtos')
