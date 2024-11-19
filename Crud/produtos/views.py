@@ -1,8 +1,9 @@
 # views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Produto, Categoria, Movimentacao
 from .forms import ProdutoForm
 from django.contrib import messages 
+from django.db import models 
 
 def lista_produtos(request):
     produtos = Produto.objects.all()
@@ -49,10 +50,40 @@ def ver_estoque_baixo(request):
 
 # Procurar produto
 def procurar_produto(request):
-    query = request.GET.get('query', '')
-    produtos = Produto.objects.filter(nome__icontains=query)
+    nome = request.GET.get('nome', '').strip()
+    codigo = request.GET.get('codigo', '').strip()
+    categoria_id = request.GET.get('categoria', '')
+    incluir_ativos = request.GET.get('incluir_ativos', 'on') == 'on'
+    incluir_inativos = request.GET.get('incluir_inativos', '') == 'on'
+    incluir_estoque_baixo = request.GET.get('incluir_estoque_baixo', '') == 'on'
+
+    # Inicia o queryset de produtos
+    produtos = Produto.objects.all()
+
+    # Filtra pelo nome, se informado
+    if nome:
+        produtos = produtos.filter(nome__icontains=nome)
+
+    # Filtra pelo código, se informado
+    if codigo:
+        produtos = produtos.filter(codigo__icontains=codigo)
+
+    # Filtra pela categoria, se selecionada
+    if categoria_id:
+        produtos = produtos.filter(categoria_id=categoria_id)
+
+    # Filtrar por status (ativos ou inativos)
+    if not (incluir_ativos and incluir_inativos):
+        if incluir_ativos:
+            produtos = produtos.filter(ativo=True)
+        elif incluir_inativos:
+            produtos = produtos.filter(ativo=False)
+
+    # Filtrar por estoque baixo, se selecionado
+    if incluir_estoque_baixo:
+        produtos = produtos.filter(quantidade__lte=models.F('quantidade_minima'))
+
     return render(request, 'produtos/lista_produtos.html', {'produtos': produtos})
-from django.shortcuts import get_object_or_404
 
 # editar produto
 def editar_produto(request, produto_id):

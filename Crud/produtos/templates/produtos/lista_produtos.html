@@ -41,16 +41,14 @@
             </div>
             <div class="col-md-6 text-end">
                 <!-- Campo de Busca -->
-                <form method="GET" action="{% url 'procurar_produto' %}" class="d-inline-block">
-                    <input
-                        type="text"
-                        name="query"
-                        class="form-control d-inline-block me-2"
-                        placeholder="Procurar"
-                        id="procurar"
-                    />
-                    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
-                </form>
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary ms-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#procurarProdutoModal"
+                >
+                    Procurar
+                </button>
 
                 <!-- Botões Cadastrar Produto e Mais -->
                 <button
@@ -71,7 +69,60 @@
                 </button>
             </div>
         </div>
-
+        <div class="modal fade" id="procurarProdutoModal" tabindex="-1" aria-labelledby="procurarProdutoModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="procurarProdutoModalLabel">Procurar Produtos</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="GET" action="{% url 'procurar_produto' %}">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                              <label for="id_nome" class="form-label">Nome</label>
+                              <input type="text" class="form-control" name="nome" id="id_nome">
+                          </div>
+                          <div class="mb-3">
+                              <label for="id_codigo" class="form-label">ID</label>
+                              <input type="text" class="form-control" name="codigo" id="id_codigo">
+                          </div>
+                          <div class="mb-3">
+                              <label for="id_categoria" class="form-label">Categoria</label>
+                              <select name="categoria" id="id_categoria" class="form-control">
+                                  <option value="">Todas</option>
+                                  {% for categoria in categorias %}
+                                  <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                          <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" name="incluir_ativos" id="id_incluir_ativos" checked>
+                              <label class="form-check-label" for="id_incluir_ativos">
+                                  Incluir produtos ativos
+                              </label>
+                          </div>
+                          <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" name="incluir_inativos" id="id_incluir_inativos">
+                              <label class="form-check-label" for="id_incluir_inativos">
+                                  Incluir produtos inativos
+                              </label>
+                          </div>
+                          <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" name="incluir_estoque_baixo" id="id_incluir_estoque_baixo">
+                              <label class="form-check-label" for="id_incluir_estoque_baixo">
+                                  Incluir produtos com estoque baixo
+                              </label>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Procurar</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
         <!-- Modal Cadastrar Produto -->
         <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
             <div class="modal-dialog">
