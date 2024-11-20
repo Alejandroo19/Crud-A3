@@ -14,6 +14,7 @@ class Produto(models.Model):
     quantidade_minima = models.PositiveIntegerField(default=0)
     preco = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
+    ativo = models.BooleanField(default=True) 
 
     def save(self, *args, **kwargs):
         # Se não houver um 'codigo' definido, crie um novo ID sequencial começando em "0001"

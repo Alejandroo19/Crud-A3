@@ -4,6 +4,8 @@ from .models import Produto, Categoria, Movimentacao
 from .forms import ProdutoForm
 from django.contrib import messages 
 from django.db import models 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 def lista_produtos(request):
     produtos = Produto.objects.all()
@@ -166,4 +168,17 @@ def movimentar_produto(request, produto_id):
             produto=produto
         )
 
+    return redirect('lista_produtos')
+    
+
+def ativar_desativar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    produto.ativo = not produto.ativo  # Alterna entre ativo e inativo
+    produto.save()
+    
+    if produto.ativo:
+        messages.success(request, f'O produto "{produto.nome}" foi reativado com sucesso.')
+    else:
+        messages.success(request, f'O produto "{produto.nome}" foi desativado com sucesso.')
+        
     return redirect('lista_produtos')
