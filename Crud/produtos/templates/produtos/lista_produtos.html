@@ -69,253 +69,258 @@
                 </button>
             </div>
         </div>
-        <div class="modal fade" id="procurarProdutoModal" tabindex="-1" aria-labelledby="procurarProdutoModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="procurarProdutoModalLabel">Procurar Produtos</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      <form method="GET" action="{% url 'procurar_produto' %}">
-                          {% csrf_token %}
-                          <div class="mb-3">
-                              <label for="id_nome" class="form-label">Nome</label>
-                              <input type="text" class="form-control" name="nome" id="id_nome">
-                          </div>
-                          <div class="mb-3">
-                              <label for="id_codigo" class="form-label">ID</label>
-                              <input type="text" class="form-control" name="codigo" id="id_codigo">
-                          </div>
-                          <div class="mb-3">
-                              <label for="id_categoria" class="form-label">Categoria</label>
-                              <select name="categoria" id="id_categoria" class="form-control">
-                                  <option value="">Todas</option>
-                                  {% for categoria in categorias %}
-                                  <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                                  {% endfor %}
-                              </select>
-                          </div>
-                          <div class="form-check mb-2">
-                              <input class="form-check-input" type="checkbox" name="incluir_ativos" id="id_incluir_ativos" checked>
-                              <label class="form-check-label" for="id_incluir_ativos">
-                                  Incluir produtos ativos
-                              </label>
-                          </div>
-                          <div class="form-check mb-2">
-                              <input class="form-check-input" type="checkbox" name="incluir_inativos" id="id_incluir_inativos">
-                              <label class="form-check-label" for="id_incluir_inativos">
-                                  Incluir produtos inativos
-                              </label>
-                          </div>
-                          <div class="form-check mb-2">
-                              <input class="form-check-input" type="checkbox" name="incluir_estoque_baixo" id="id_incluir_estoque_baixo">
-                              <label class="form-check-label" for="id_incluir_estoque_baixo">
-                                  Incluir produtos com estoque baixo
-                              </label>
-                          </div>
-                          <div class="modal-footer">
-                              <button type="submit" class="btn btn-primary">Procurar</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-        <!-- Modal Cadastrar Produto -->
-        <div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Cadastrar Produto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" action="{% url 'cadastrar_produto' %}">
-                            {% csrf_token %}
-                            <div class="mb-3 col-sm-6">
-                                <label for="id_nome" class="form-label">Nome</label>
-                                {{ form.nome }}
-                            </div>
-                            <div class="mb-3 col-sm-6">
-                                <label for="id_categoria" class="form-label">Categoria</label>
-                                {{ form.categoria }}
-                            </div>
-                            <div class="mb-3 col-sm-6">
-                                <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
-                                {{ form.quantidade_minima }}
-                            </div>
-                            <div class="mb-3 col-sm-6">
-                                <label for="id_preco" class="form-label">Preço</label>
-                                {{ form.preco }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Cadastrar</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+  <!-- Modal Procurar Produto -->
+  <div class="modal fade" id="procurarProdutoModal" tabindex="-1" aria-labelledby="procurarProdutoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="procurarProdutoModalLabel">Procurar Produtos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-
-        <!-- Modal Mais Opções -->
-        <div class="modal fade" tabindex="-1" id="maisModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Mais Opções</h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
+            <div class="modal-body">
+                <form method="GET" action="{% url 'procurar_produto' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="nome" id="id_nome">
                     </div>
-                    <div class="modal-body text-center">
-                        <!-- Botão Gerenciar Categorias -->
-                        <a href="{% url 'gerenciar_categorias' %}" class="btn btn-outline-secondary w-100 my-2">
-                            Gerenciar Categorias
-                        </a>
-                        <!-- Botão Histórico de Movimentações -->
-                        <a href="{% url 'historico_movimentacoes' %}" class="btn btn-outline-secondary w-100 my-2">
-                            Histórico de Movimentações
-                        </a>
+                    <div class="mb-3">
+                        <label for="id_codigo" class="form-label">ID</label>
+                        <input type="text" class="form-control" name="codigo" id="id_codigo">
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <label for="id_categoria" class="form-label">Categoria</label>
+                        <select name="categoria" id="id_categoria" class="form-control">
+                            <option value="">Todas</option>
+                            {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="incluir_ativos" id="id_incluir_ativos" checked>
+                        <label class="form-check-label" for="id_incluir_ativos">
+                            Incluir produtos ativos
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="incluir_inativos" id="id_incluir_inativos">
+                        <label class="form-check-label" for="id_incluir_inativos">
+                            Incluir produtos inativos
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="incluir_estoque_baixo" id="id_incluir_estoque_baixo">
+                        <label class="form-check-label" for="id_incluir_estoque_baixo">
+                            Incluir produtos com estoque baixo
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Procurar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
-        </div>
-
-        <!-- Lista de Produtos -->
-        <div class="produtos-lista">
-            {% for produto in produtos %}
-            <div class="produto-item mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
-                <!-- Informações à esquerda -->
-                <div class="left-column">
-                  <p class="product-name mb-1"><strong>{{ produto.nome }}</strong></p>
-                  <p class="product-id text-muted mb-1">PID {{ produto.codigo }}</p>
-                  <p class="text-muted mb-2">{{ produto.categoria.nome }}</p>
-              
-                  {% if produto.ativo %}
-                      <!-- Botão Movimentar Produto -->
-                      <button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#movimentarProdutoModal{{ produto.id }}">
-                          Movimentar
-                      </button>
-                  {% else %}
-                      <!-- Produto Desativado -->
-                      <button type="button" class="btn btn-outline-secondary btn-sm me-2" disabled>
-                          Movimentar
-                      </button>
-                  {% endif %}
-              
-                  <!-- Botão Editar Produto -->
-                  <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editarProdutoModal{{ produto.id }}">
-                      Editar
-                  </button>
-              </div>
-
-      <!-- Modal Editar Produto -->
-                <div class="modal fade" id="editarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="editarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
-                  <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="editarProdutoModalLabel{{ produto.id }}">Editar Produto - {{ produto.nome }}</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <form method="post" action="{% url 'editar_produto' produto.id %}">
-                              {% csrf_token %}
-                              <div class="modal-body">
-                                  <div class="mb-3">
-                                      <label for="id_nome_{{ produto.id }}" class="form-label">Nome</label>
-                                      <input type="text" class="form-control" id="id_nome_{{ produto.id }}" name="nome" value="{{ produto.nome }}" required>
-                                  </div>
-                                  <div class="mb-3">
-                                      <label for="id_categoria_{{ produto.id }}" class="form-label">Categoria</label>
-                                      <select name="categoria" id="id_categoria_{{ produto.id }}" class="form-control" required>
-                                          <option value="">-- Selecione uma Categoria --</option>
-                                          {% for categoria in form.fields.categoria.queryset %}
-                                          <option value="{{ categoria.id }}" {% if produto.categoria.id == categoria.id %}selected{% endif %}>{{ categoria.nome }}</option>
-                                          {% endfor %}
-                                      </select>
-                                  </div>
-                                  <div class="mb-3">
-                                      <label for="id_quantidade_minima_{{ produto.id }}" class="form-label">Quantidade Mínima</label>
-                                      <input type="number" class="form-control" id="id_quantidade_minima_{{ produto.id }}" name="quantidade_minima" value="{{ produto.quantidade_minima }}" min="0" required>
-                                  </div>
-                                  <div class="mb-3">
-                                      <label for="id_preco_{{ produto.id }}" class="form-label">Preço</label>
-                                      <input type="number" class="form-control" id="id_preco_{{ produto.id }}" name="preco" value="{{ produto.preco }}" step="0.01" min="0" required>
-                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                  <button type="submit" class="btn btn-primary">Salvar</button>
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#desativarProdutoModal{{ produto.id }}">Desativar Produto</button>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-                </div>
-<!-- Modal Desativar Produto -->
-                    <div class="modal fade" id="desativarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="desativarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
-                      <div class="modal-dialog">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title" id="desativarProdutoModalLabel{{ produto.id }}">Aviso</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                  <p>Desativar o produto não o removerá do sistema, mas fará com que ele não apareça mais no relatório de estoque (exceto se ativado o filtro de busca para produtos desativados) e não permitirá mais movimentações vinculadas a ele.</p>
-                                  <p>Você poderá reativar o produto quando quiser.</p>
-                                  <p>Deseja continuar?</p>
-                              </div>
-                              <div class="modal-footer">
-                                  <button type="button" class="btn btn-success" data-bs-dismiss="modal">Não</button>
-                                  <form method="post" action="{% url 'ativar_desativar_produto' produto.id %}">
-                                      {% csrf_token %}
-                                      <button type="submit" class="btn btn-danger">Sim</button>
-                                  </form>
-                              </div>
-                          </div>
-                      </div>
-                    </div>
-
-            <!-- Modal Movimentar Produto -->
-            <div class="modal fade" id="movimentarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="movimentarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="movimentarProdutoModalLabel{{ produto.id }}">Movimentar Produto - {{ produto.nome }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form method="post" action="{% url 'movimentar_produto' produto.id %}">
-                            {% csrf_token %}
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="id_operacao_{{ produto.id }}" class="form-label">Operação</label>
-                                    <select name="operacao" id="id_operacao_{{ produto.id }}" class="form-control" required>
-                                        <option value="">Selecione</option>
-                                        <option value="entrada">Entrada</option>
-                                        <option value="saida">Saída</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="id_quantidade_{{ produto.id }}" class="form-label">Quantidade</label>
-                                    <input type="number" class="form-control" id="id_quantidade_{{ produto.id }}" name="quantidade" min="0" required>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Movimentar</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
+</div>
+
+<!-- Modal Cadastrar Produto -->
+<div class="modal fade" tabindex="-1" id="cadastrarProdutoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastrar Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'cadastrar_produto' %}">
+                    {% csrf_token %}
+                    <div class="mb-3 col-sm-6">
+                        <label for="id_nome" class="form-label">Nome</label>
+                        {{ form.nome }}
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label for="id_categoria" class="form-label">Categoria</label>
+                        {{ form.categoria }}
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
+                        {{ form.quantidade_minima }}
+                    </div>
+                    <div class="mb-3 col-sm-6">
+                        <label for="id_preco" class="form-label">Preço</label>
+                        {{ form.preco }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mais Opções -->
+<div class="modal fade" tabindex="-1" id="maisModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mais Opções</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <!-- Botão Gerenciar Categorias -->
+                <a href="{% url 'gerenciar_categorias' %}" class="btn btn-outline-secondary w-100 my-2">
+                    Gerenciar Categorias
+                </a>
+                <!-- Botão Histórico de Movimentações -->
+                <a href="{% url 'historico_movimentacoes' %}" class="btn btn-outline-secondary w-100 my-2">
+                    Histórico de Movimentações
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de Produtos -->
+<div class="produtos-lista">
+    {% for produto in produtos %}
+    <div class="produto-item mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+        <!-- Informações à esquerda -->
+        <div class="left-column">
+            <p class="product-name mb-1"><strong>{{ produto.nome }}</strong></p>
+            <p class="product-id text-muted mb-1">PID {{ produto.codigo }}</p>
+            <p class="text-muted mb-2">{{ produto.categoria.nome }}</p>
+            
+            {% if produto.ativo %}
+                <!-- Botão Movimentar Produto -->
+                <button type="button" class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#movimentarProdutoModal{{ produto.id }}">
+                    Movimentar
+                </button>
+            {% else %}
+                <!-- Produto Desativado -->
+                <button type="button" class="btn btn-outline-secondary btn-sm me-2" disabled>
+                    Movimentar
+                </button>
+            {% endif %}
+            
+            <!-- Botão Editar Produto -->
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editarProdutoModal{{ produto.id }}">
+                Editar
+            </button>
+        </div>
+
+        <!-- Informações à direita -->
+        <div class="right-column text-end">
+            <p class="mb-1"><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+            <p class="mb-0"><strong>R$ {{ produto.preco }}</strong></p>
+        </div>
+    </div>
+
+    <!-- Modal Editar Produto -->
+    <div class="modal fade" id="editarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="editarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProdutoModalLabel{{ produto.id }}">Editar Produto - {{ produto.nome }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'editar_produto' produto.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="id_nome_{{ produto.id }}" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="id_nome_{{ produto.id }}" name="nome" value="{{ produto.nome }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categoria_{{ produto.id }}" class="form-label">Categoria</label>
+                            <select name="categoria" id="id_categoria_{{ produto.id }}" class="form-control" required>
+                                <option value="">-- Selecione uma Categoria --</option>
+                                {% for categoria in form.fields.categoria.queryset %}
+                                <option value="{{ categoria.id }}" {% if produto.categoria.id == categoria.id %}selected{% endif %}>{{ categoria.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_quantidade_minima_{{ produto.id }}" class="form-label">Quantidade Mínima</label>
+                            <input type="number" class="form-control" id="id_quantidade_minima_{{ produto.id }}" name="quantidade_minima" value="{{ produto.quantidade_minima }}" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_preco_{{ produto.id }}" class="form-label">Preço</label>
+                            <input type="number" class="form-control" id="id_preco_{{ produto.id }}" name="preco" value="{{ produto.preco }}" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#desativarProdutoModal{{ produto.id }}">Desativar Produto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Desativar Produto -->
+    <div class="modal fade" id="desativarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="desativarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="desativarProdutoModalLabel{{ produto.id }}">Aviso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Desativar o produto não o removerá do sistema, mas fará com que ele não apareça mais no relatório de estoque (exceto se ativado o filtro de busca para produtos desativados) e não permitirá mais movimentações vinculadas a ele.</p>
+                    <p>Você poderá reativar o produto quando quiser.</p>
+                    <p>Deseja continuar?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Não</button>
+                    <form method="post" action="{% url 'ativar_desativar_produto' produto.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Sim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Movimentar Produto -->
+    <div class="modal fade" id="movimentarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="movimentarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="movimentarProdutoModalLabel{{ produto.id }}">Movimentar Produto - {{ produto.nome }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'movimentar_produto' produto.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="id_operacao_{{ produto.id }}" class="form-label">Operação</label>
+                            <select name="operacao" id="id_operacao_{{ produto.id }}" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="saida">Saída</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_quantidade_{{ produto.id }}" class="form-label">Quantidade</label>
+                            <input type="number" class="form-control" id="id_quantidade_{{ produto.id }}" name="quantidade" min="0" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Movimentar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+<script src="{% static 'js/bootstrap.js' %}"></script>
 </body>
 </html>
