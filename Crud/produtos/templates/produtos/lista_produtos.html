@@ -134,21 +134,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="{% url 'cadastrar_produto' %}">
+                <form method="post" action="{% url 'lista_produtos' %}">
                     {% csrf_token %}
-                    <div class="mb-3 col-sm-6">
+                    <div class="mb-3">
                         <label for="id_nome" class="form-label">Nome</label>
-                        {{ form.nome }}
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="id_nome" 
+                            name="nome" 
+                            pattern="^(?!\s*$).{2,}(?:\s(?!\s)){0,5}$" 
+                            title="O nome deve ter pelo menos 2 caracteres" 
+                            maxlength="30" 
+                            required>
                     </div>
-                    <div class="mb-3 col-sm-6">
+                    <div class="mb-3">
                         <label for="id_categoria" class="form-label">Categoria</label>
                         {{ form.categoria }}
                     </div>
-                    <div class="mb-3 col-sm-6">
+                    <div class="mb-3">
                         <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
                         {{ form.quantidade_minima }}
                     </div>
-                    <div class="mb-3 col-sm-6">
+                    <div class="mb-3">
                         <label for="id_preco" class="form-label">Preço</label>
                         {{ form.preco }}
                     </div>

@@ -28,10 +28,7 @@ def lista_produtos(request):
         form = ProdutoForm()
         # Atualizar o queryset do campo categoria para apenas categorias ativas
         form.fields['categoria'].queryset = categorias_ativas
-
-    # Debug - Verificar o queryset após a atualização
-    print("Updated queryset for categories:", form.fields['categoria'].queryset)
-
+        
     # Passar as categorias para o contexto
     return render(request, 'produtos/lista_produtos.html', {
         'produtos': produtos,

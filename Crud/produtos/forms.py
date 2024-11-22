@@ -1,5 +1,6 @@
 from django import forms
 from .models import Produto, Categoria
+from django.core.validators import MinLengthValidator
 
 
 class ProdutoForm(forms.ModelForm):
@@ -13,9 +14,13 @@ class ProdutoForm(forms.ModelForm):
             'categoria': forms.Select(attrs={'class': 'form-control'}),
         }
 
+    nome = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        validators=[MinLengthValidator(2)], )
+
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Garantir que o valor padrão no campo seja um valor vazio
         self.fields['categoria'].empty_label = "-- Selecione uma Categoria --"
         # Filtro para exibir apenas categorias ativas
         self.fields['categoria'].queryset = Categoria.objects.filter(ativo=True)
