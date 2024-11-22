@@ -1,7 +1,7 @@
 # views.py
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404 
 from .models import Produto, Categoria, Movimentacao
-from .forms import ProdutoForm
+from .forms import ProdutoForm, CategoriaForm
 from django.contrib import messages 
 from django.db import models 
 from django.http import HttpResponseRedirect
@@ -54,10 +54,16 @@ def ver_estoque_baixo(request):
 def procurar_produto(request):
     nome = request.GET.get('nome', '').strip()
     codigo = request.GET.get('codigo', '').strip()
+    incluir_ativos = request.GET.get('incluir_ativos') == 'on'
+    incluir_inativos = request.GET.get('incluir_inativos') == 'on'
+    incluir_estoque_baixo = request.GET.get('incluir_estoque_baixo') == 'on'
+
+    # Filtrar categorias de acordo com os filtros selecionados
+    categorias = Categoria.objects.all()
+    if not incluir_inativos:
+        categorias = categorias.filter(ativo=True)
+
     categoria_id = request.GET.get('categoria', '')
-    incluir_ativos = request.GET.get('incluir_ativos', 'on') == 'on'
-    incluir_inativos = request.GET.get('incluir_inativos', '') == 'on'
-    incluir_estoque_baixo = request.GET.get('incluir_estoque_baixo', '') == 'on'
 
     # Inicia o queryset de produtos
     produtos = Produto.objects.all()
@@ -75,31 +81,54 @@ def procurar_produto(request):
         produtos = produtos.filter(categoria_id=categoria_id)
 
     # Filtrar por status (ativos ou inativos)
-    if not (incluir_ativos and incluir_inativos):
-        if incluir_ativos:
-            produtos = produtos.filter(ativo=True)
-        elif incluir_inativos:
-            produtos = produtos.filter(ativo=False)
+    if incluir_ativos and incluir_inativos:
+        pass
+    elif incluir_ativos:
+        produtos = produtos.filter(ativo=True)
+    elif incluir_inativos:
+        produtos = produtos.filter(ativo=False)
 
     # Filtrar por estoque baixo, se selecionado
     if incluir_estoque_baixo:
         produtos = produtos.filter(quantidade__lte=models.F('quantidade_minima'))
 
-    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos})
+    # Criar instâncias dos formulários
+    form = ProdutoForm()
+    categoria_form = CategoriaForm()
+
+    return render(request, 'produtos/lista_produtos.html', {
+        'produtos': produtos,
+        'categorias': categorias,
+        'form': form,
+        'categoria_form': categoria_form
+    })
 
 # editar produto
 def editar_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
-    
+    categorias_ativas = Categoria.objects.filter(ativo=True)  # Filtra apenas categorias ativas
+
     if request.method == 'POST':
         form = ProdutoForm(request.POST, instance=produto)
+        # Atualiza o queryset de categorias
+        form.fields['categoria'].queryset = categorias_ativas
         if form.is_valid():
             form.save()
+            messages.success(request, 'Produto atualizado com sucesso!')
             return redirect('lista_produtos')
     else:
         form = ProdutoForm(instance=produto)
-    
-    return render(request, 'produtos/editar_produto.html', {'form': form, 'produto': produto})
+        # Atualiza o queryset de categorias para apenas as ativas
+        form.fields['categoria'].queryset = categorias_ativas
+
+    produtos = Produto.objects.all()  # Garantir que todos os produtos sejam renderizados na página principal
+
+    return render(request, 'produtos/lista_produtos.html', {
+        'form': form,
+        'produto': produto,
+        'produtos': produtos,  # Passar todos os produtos para renderização
+        'categorias_ativas': categorias_ativas  # Passar categorias ativas também, caso precise
+    })
 
 def gerenciar_categorias(request):
     categorias = Categoria.objects.all()

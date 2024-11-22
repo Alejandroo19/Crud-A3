@@ -17,6 +17,8 @@ class ProdutoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Garantir que o valor padrão no campo seja um valor vazio
         self.fields['categoria'].empty_label = "-- Selecione uma Categoria --"
+        # Filtro para exibir apenas categorias ativas
+        self.fields['categoria'].queryset = Categoria.objects.filter(ativo=True)
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -25,3 +27,5 @@ class CategoriaForm(forms.ModelForm):
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+        
