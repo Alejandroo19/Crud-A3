@@ -48,9 +48,19 @@ def cadastrar_produto(request):
     return render(request, 'produtos/lista_produtos.html', {'form': form})
 
 # Ver produtos com estoque baixo
-def ver_estoque_baixo(request):
-    produtos = Produto.objects.filter(quantidade__lte=models.F('quantidade_minima'))
-    return render(request, 'produtos/lista_produtos.html', {'produtos': produtos})
+def estoque_baixo(request):
+    # Filtrar produtos com quantidade menor do que a quantidade mínima
+    produtos = Produto.objects.filter(quantidade__lt=models.F('quantidade_minima'))
+    
+    # Obter apenas categorias ativas para serem usadas no formulário de cadastro/procura
+    categorias_ativas = Categoria.objects.filter(ativo=True)
+
+    # Renderizar o template principal, passando o queryset dos produtos filtrados
+    return render(request, 'produtos/lista_produtos.html', {
+        'produtos': produtos,
+        'categorias': categorias_ativas,
+        'form': ProdutoForm(),
+    })
 
 # Procurar produto
 def procurar_produto(request):
