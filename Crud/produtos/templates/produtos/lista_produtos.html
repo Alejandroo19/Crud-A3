@@ -6,17 +6,34 @@
     <title>Meu Estoque</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
     <style>
-        .produto-item .left-column {
-            margin-right: 30px; /* Ajustar o espaço entre categoria e botão */
-        }
+        .produto-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            }
+            .produto-item:hover {
+                     transform: scale(1.01);
+                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+                    }
+                    .produto-item .btn {
+                    border-radius: 5px;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+                .container {
+                     margin-top: 30px; 
+                }   
         .produto-item .right-column {
-            align-self: flex-start; /* Ajustar posição da quantidade para cima */
+            align-self: flex-start; 
         }
         .product-header {
               display: flex;
               align-items: center;
-             gap: 15px; /* Espaçamento entre o nome do produto e o PID */
-        }
+             gap: 15px; 
+            }
 
         .product-name {
               margin-bottom: 0;
@@ -26,6 +43,7 @@
                  margin-bottom: 0;
                  font-weight: normal;
         }
+
     </style>
 </head>
 <body>
@@ -224,6 +242,10 @@
         <div class="right-column text-end">
             <p class="mb-1"><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
             <p class="mb-0"><strong>R$ {{ produto.preco }}</strong></p>
+
+            {% if produto.quantidade < produto.quantidade_minima %}
+        <button class="btn btn-danger btn-sm mt-2">Estoque Baixo</button>
+    {% endif %}
         </div>
     </div>
 

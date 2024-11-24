@@ -28,7 +28,7 @@ def lista_produtos(request):
         form = ProdutoForm()
         # Atualizar o queryset do campo categoria para apenas categorias ativas
         form.fields['categoria'].queryset = categorias_ativas
-        
+
     # Passar as categorias para o contexto
     return render(request, 'produtos/lista_produtos.html', {
         'produtos': produtos,
@@ -197,6 +197,10 @@ def movimentar_produto(request, produto_id):
             quantidade=quantidade,
             produto=produto
         )
+        
+         # Verificar se a quantidade está agora acima da quantidade mínima, para remover o aviso "Estoque Baixo"
+        if produto.quantidade >= produto.quantidade_minima:
+            messages.info(request, f'O produto {produto.nome} agora está acima da quantidade mínima.')
 
     return redirect('lista_produtos')
     
