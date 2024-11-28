@@ -4,6 +4,7 @@ from .models import Produto, Categoria, Movimentacao
 from .forms import ProdutoForm, CategoriaForm
 from django.contrib import messages 
 from django.db import models 
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -185,32 +186,44 @@ def movimentar_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     if request.method == 'POST':
         operacao = request.POST.get('operacao')
-        quantidade = int(request.POST.get('quantidade'))
+        try:
+            # Converter a quantidade para int e verificar se é válida
+            quantidade = int(request.POST.get('quantidade'))
 
-        if operacao == 'entrada':
-            produto.quantidade += quantidade
-            produto.save()
-            messages.success(request, f'Entrada de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
-        elif operacao == 'saida':
-            if produto.quantidade >= quantidade:
-                produto.quantidade -= quantidade
+            # Limite máximo que pode ser suportado (baseado na capacidade do banco)
+            max_quantidade = 99999999999999999
+            if quantidade > max_quantidade:
+                raise ValidationError("A quantidade não pode ser maior que 99999.")
+            
+            if operacao == 'entrada':
+                produto.quantidade += quantidade
                 produto.save()
-                messages.success(request, f'Saída de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
+                messages.success(request, f'Entrada de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
+            elif operacao == 'saida':
+                if produto.quantidade >= quantidade:
+                    produto.quantidade -= quantidade
+                    produto.save()
+                    messages.success(request, f'Saída de {quantidade} unidades realizada com sucesso para o produto {produto.nome}.')
+                else:
+                    messages.error(request, f'Quantidade insuficiente em estoque para realizar a saída do produto {produto.nome}.')
             else:
-                messages.error(request, f'Quantidade insuficiente em estoque para realizar a saída do produto {produto.nome}.')
-        else:
-            messages.error(request, 'Operação inválida. Selecione "Entrada" ou "Saída".')
+                messages.error(request, 'Operação inválida. Selecione "Entrada" ou "Saída".')
 
-        # Registrar a movimentação
-        Movimentacao.objects.create(
-            tipo=operacao,
-            quantidade=quantidade,
-            produto=produto
-        )
-        
-         # Verificar se a quantidade está agora acima da quantidade mínima, para remover o aviso "Estoque Baixo"
-        if produto.quantidade >= produto.quantidade_minima:
-            messages.info(request, f'O produto {produto.nome} agora está acima da quantidade mínima.')
+            # Registrar a movimentação
+            Movimentacao.objects.create(
+                tipo=operacao,
+                quantidade=quantidade,
+                produto=produto
+            )
+            
+            # Verificar se a quantidade está agora acima da quantidade mínima, para remover o aviso "Estoque Baixo"
+            if produto.quantidade >= produto.quantidade_minima:
+                messages.info(request, f'O produto {produto.nome} agora está acima da quantidade mínima.')
+
+        except ValueError:
+            messages.error(request, "Por favor, insira uma quantidade válida.")
+        except ValidationError as e:
+            messages.error(request, str(e))
 
     return redirect('lista_produtos')
     

@@ -10,7 +10,7 @@ class Categoria(models.Model):
 class Produto(models.Model):
     codigo = models.CharField(max_length=10, unique=True, editable=False)
     nome = models.CharField(max_length=60)
-    quantidade = models.PositiveIntegerField(default=0, editable=False)
+    quantidade = models.BigIntegerField(default=0, editable=False)
     quantidade_minima = models.PositiveIntegerField(default=0)
     preco = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)

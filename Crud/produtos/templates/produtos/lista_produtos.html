@@ -172,11 +172,26 @@
                     </div>
                     <div class="mb-3">
                         <label for="id_quantidade_minima" class="form-label">Quantidade Mínima</label>
-                        {{ form.quantidade_minima }}
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="id_quantidade_minima" 
+                            name="quantidade_minima" 
+                            pattern="\d{1,17}" 
+                            title="A quantidade mínima deve ser um número com até 17 dígitos" 
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="id_preco" class="form-label">Preço</label>
-                        {{ form.preco }}
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="id_preco" 
+                                    name="preco" 
+                                    pattern="^\d{1,7}(\.\d{1,2})?$" 
+                                    title="O preço deve ser um número com até 7 dígitos antes do ponto e até 2 dígitos depois do ponto (ex: 9999999.99)" 
+                                    maxlength="10" 
+                                    required>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Cadastrar</button>
@@ -250,47 +265,63 @@
     </div>
 
     <!-- Modal Editar Produto -->
-<div class="modal fade" id="editarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="editarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editarProdutoModalLabel{{ produto.id }}">Editar Produto - {{ produto.nome }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form method="post" action="{% url 'editar_produto' produto.id %}">
-              {% csrf_token %}
-              <div class="modal-body">
-                  <div class="mb-3">
-                      <label for="id_nome_{{ produto.id }}" class="form-label">Nome</label>
-                      <input type="text" class="form-control" id="id_nome_{{ produto.id }}" name="nome" value="{{ produto.nome }}" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="id_categoria_{{ produto.id }}" class="form-label">Categoria</label>
-                      {{ form.categoria }}
-                  </div>
-                  <div class="mb-3">
-                      <label for="id_quantidade_minima_{{ produto.id }}" class="form-label">Quantidade Mínima</label>
-                      <input type="number" class="form-control" id="id_quantidade_minima_{{ produto.id }}" name="quantidade_minima" value="{{ produto.quantidade_minima }}" min="0" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="id_preco_{{ produto.id }}" class="form-label">Preço</label>
-                      <input type="number" class="form-control" id="id_preco_{{ produto.id }}" name="preco" value="{{ produto.preco }}" step="0.01" min="0" required>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Salvar</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
-                  {% if produto.ativo %}
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#desativarProdutoModal{{ produto.id }}">Desativar Produto</button>
-                  {% else %}
-                      <button type="submit" class="btn btn-success" formaction="{% url 'ativar_desativar_produto' produto.id %}">Ativar Produto</button>
-                  {% endif %}
-              </div>
-          </form>
+    <div class="modal fade" id="editarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="editarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProdutoModalLabel{{ produto.id }}">Editar Produto - {{ produto.nome }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'editar_produto' produto.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="id_nome_{{ produto.id }}" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="id_nome_{{ produto.id }}" name="nome" value="{{ produto.nome }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categoria_{{ produto.id }}" class="form-label">Categoria</label>
+                            {{ form.categoria }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_quantidade_minima_{{ produto.id }}" class="form-label">Quantidade Mínima</label>
+                            <input 
+                                  type="text" 
+                                  class="form-control" 
+                                  id="id_quantidade_minima_{{ produto.id }}" 
+                                  name="quantidade_minima" 
+                                  value="{{ produto.quantidade_minima }}" 
+                                  pattern="\d{1,17}" 
+                                  title="A quantidade mínima deve ser um número com até 17 dígitos" 
+                                  required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_preco_{{ produto.id }}" class="form-label">Preço</label>
+                            <input 
+                            type="text" 
+                            class="form-control" 
+                            id="id_preco_{{ produto.id }}" 
+                            name="preco" 
+                            value="{{ produto.preco }}"
+                            pattern="^\d{1,12}(\.\d{1,2})?$" 
+                            title="Digite o preço corretamente, o limite é até 12 dígitos" 
+                            required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      
+                        {% if produto.ativo %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#desativarProdutoModal{{ produto.id }}">Desativar Produto</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success" formaction="{% url 'ativar_desativar_produto' produto.id %}">Ativar Produto</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
       </div>
-  </div>
-</div>
 
     <!-- Modal Desativar Produto -->
     <div class="modal fade" id="desativarProdutoModal{{ produto.id }}" tabindex="-1" aria-labelledby="desativarProdutoModalLabel{{ produto.id }}" aria-hidden="true">
@@ -337,7 +368,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="id_quantidade_{{ produto.id }}" class="form-label">Quantidade</label>
-                    <input type="number" class="form-control" id="id_quantidade_{{ produto.id }}" name="quantidade" min="0" required>
+                    <input type="number" class="form-control" id="id_quantidade_{{ produto.id }}" name="quantidade" min="1" max="999999999" maxlength="5" required>
                 </div>
             </div>
             <div class="modal-footer">
