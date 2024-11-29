@@ -5,15 +5,22 @@ from .forms import ProdutoForm, CategoriaForm
 from django.contrib import messages 
 from django.db import models 
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 def lista_produtos(request):
-    produtos = Produto.objects.all()
+    # Filtra apenas os produtos ativos para a tela inicial
+    produtos = Produto.objects.filter(ativo=True)
+    
     categorias_ativas = Categoria.objects.filter(ativo=True)
 
     # Debug - Verificar categorias ativas
     print("Categorias ativas (na view):", categorias_ativas)
+
+    # Verificar se há produtos com estoque abaixo do mínimo e que estejam ativos
+    produtos_estoque_baixo = Produto.objects.filter(quantidade__lte=models.F('quantidade_minima'), ativo=True)
+    tem_estoque_baixo = produtos_estoque_baixo.exists()
 
     if request.method == 'POST':
         form = ProdutoForm(request.POST)
@@ -30,13 +37,13 @@ def lista_produtos(request):
         # Atualizar o queryset do campo categoria para apenas categorias ativas
         form.fields['categoria'].queryset = categorias_ativas
 
-    # Passar as categorias para o contexto
+    # Passar as categorias e a flag `tem_estoque_baixo` para o contexto
     return render(request, 'produtos/lista_produtos.html', {
         'produtos': produtos,
         'form': form,
         'categorias': categorias_ativas,  # Incluindo as categorias no contexto
+        'tem_estoque_baixo': tem_estoque_baixo  # Para controle da mensagem de aviso
     })
-
 # Cadastrar produto
 def cadastrar_produto(request):
     if request.method == 'POST':
@@ -64,18 +71,15 @@ def estoque_baixo(request):
     })
 
 # Procurar produto
+
+
 def procurar_produto(request):
     nome = request.GET.get('nome', '').strip()
     codigo = request.GET.get('codigo', '').strip()
+    categoria_id = request.GET.get('categoria', '').strip()
     incluir_ativos = request.GET.get('incluir_ativos') == 'on'
     incluir_inativos = request.GET.get('incluir_inativos') == 'on'
     incluir_estoque_baixo = request.GET.get('incluir_estoque_baixo') == 'on'
-    
-    # Filtra as categorias ativas e inativas conforme seleção do usuário
-    if incluir_ativos and incluir_inativos:
-        categorias = Categoria.objects.all()
-    else:
-        categorias = Categoria.objects.filter(ativo=True)
 
     # Inicia o queryset de produtos
     produtos = Produto.objects.all()
@@ -89,23 +93,28 @@ def procurar_produto(request):
         produtos = produtos.filter(codigo__icontains=codigo)
 
     # Filtra pela categoria, se selecionada
-    categoria_id = request.GET.get('categoria', '')
     if categoria_id and categoria_id != "Todas":
         produtos = produtos.filter(categoria_id=categoria_id)
 
-    # Filtrar por status (ativos ou inativos)
-    if incluir_ativos and incluir_inativos:
-        pass  # Nenhuma filtragem adicional é necessária
-    elif incluir_ativos:
-        produtos = produtos.filter(ativo=True)
-    elif incluir_inativos:
-        produtos = produtos.filter(ativo=False)
+    # Filtros combinados
+    query = Q()  # Cria uma query vazia para acumular condições
 
-    # Filtrar por estoque baixo, se selecionado
+    if incluir_ativos:
+        query |= Q(ativo=True)
+
+    if incluir_inativos:
+        query |= Q(ativo=False)
+
     if incluir_estoque_baixo:
-        produtos = produtos.filter(quantidade__lte=models.F('quantidade_minima'))
+        # Inclui apenas produtos ativos com estoque baixo
+        query |= Q(ativo=True, quantidade__lte=models.F('quantidade_minima'))
+
+    # Aplica os filtros combinados ao queryset
+    if query:
+        produtos = produtos.filter(query)
 
     # Cria uma instância do ProdutoForm e atualiza o queryset das categorias
+    categorias = Categoria.objects.filter(ativo=True)  # Certificar que apenas categorias ativas são exibidas
     form = ProdutoForm()
     form.fields['categoria'].queryset = categorias
 
@@ -117,29 +126,27 @@ def procurar_produto(request):
 
 # editar produto
 def editar_produto(request, produto_id):
-    produto = get_object_or_404(Produto, id=produto_id)
-    categorias_ativas = Categoria.objects.filter(ativo=True)  # Filtra apenas categorias ativas
-
+    produto = Produto.objects.get(id=produto_id)
+    categorias = Categoria.objects.filter(ativo=True)
+    
     if request.method == 'POST':
         form = ProdutoForm(request.POST, instance=produto)
-        # Atualiza o queryset de categorias
-        form.fields['categoria'].queryset = categorias_ativas
         if form.is_valid():
             form.save()
             messages.success(request, 'Produto atualizado com sucesso!')
             return redirect('lista_produtos')
+        else:
+            messages.error(request, 'Erro ao atualizar produto.')
     else:
         form = ProdutoForm(instance=produto)
-        # Atualiza o queryset de categorias para apenas as ativas
-        form.fields['categoria'].queryset = categorias_ativas
+        form.fields['categoria'].queryset = categorias
 
-    produtos = Produto.objects.all()  # Garantir que todos os produtos sejam renderizados na página principal
+    produtos = Produto.objects.all()
 
-    return render(request, 'produtos/lista_produtos.html', {
+    return render(request, 'produtos/editar_produto.html', {
         'form': form,
-        'produto': produto,
-        'produtos': produtos,  # Passar todos os produtos para renderização
-        'categorias_ativas': categorias_ativas  # Passar categorias ativas também, caso precise
+        'produto': produto,  # Passa o produto para verificar se está ativo ou não
+        'categorias': categorias
     })
 
 def gerenciar_categorias(request):
