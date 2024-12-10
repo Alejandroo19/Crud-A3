@@ -152,27 +152,75 @@ footer {
     padding: 10px 0;
     margin-top: 30px;
 }
+/* Título com Fundo Personalizado */
+.title-container {
+    background-color: #007bff; /* Azul primário */
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.title-container h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.title-container i {
+    color: #d6e4f0; /* Azul claro suave */
+    margin-right: 10px;
+}
+
+/* Alerta Estoque Baixo */
+.title-container p {
+    font-size: 1.1rem;
+    color: #ffdddd; /* Vermelho claro */
+}
+
+.title-container p a {
+    color: #ffdddd;
+    font-weight: bold;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.title-container p a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+.row {
+    background-color: #f8f9fa; /* Fundo leve */
+    border: 1px solid #d1d1d1; /* Borda cinza claro */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Cabeçalho da Página -->
-<div class="row align-items-center mb-4">
+<div class="row align-items-center mb-4 py-3 bg-light rounded shadow-sm">
+    <!-- Título e Alerta -->
     <div class="col-md-6">
-        <h2>Meu Estoque</h2>
+        <h2 class="text-primary mb-2">
+            <i class="fas fa-boxes"></i> Meu Estoque
+        </h2>
         {% if tem_estoque_baixo %}
-        <span style="color: red;">Você tem produtos com estoque baixo.</span>
-    <a href="{% url 'estoque_baixo' %}" style="color: red;">Ver</a>
+        <span class="text-danger fw-bold">Você tem produtos com estoque baixo.</span>
+        <a href="{% url 'estoque_baixo' %}" class="text-danger">Ver</a>
         {% endif %}
     </div>
+
+    <!-- Botões de Ação -->
     <div class="col-md-6 text-end">
-        <!-- Campo de Busca -->
-        <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#procurarProdutoModal">
+        <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#procurarProdutoModal">
             <i class="fas fa-search"></i> Procurar
         </button>
-
-        <!-- Botões Cadastrar Produto e Mais -->
-        <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#cadastrarProdutoModal">
+        <button type="button" class="btn btn-outline-success ms-2" data-bs-toggle="modal" data-bs-target="#cadastrarProdutoModal">
             <i class="fas fa-plus-circle"></i> Cadastrar Produto
         </button>
         <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#maisModal">
