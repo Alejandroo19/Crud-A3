@@ -8,17 +8,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         
-/* Fundo da página */
+/* Estilo Geral */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f4f9; /* Fundo cinza claro */
     color: #1b4965; /* Azul escuro */
+    margin: 0;
+    padding: 0;
 }
 
 /* Cabeçalho */
 h1 {
     font-weight: bold;
     color: #007bff; /* Azul primário */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Container Principal */
+.container {
+    margin-top: 30px;
+    max-width: 1200px;
+    padding: 15px;
+}
+
+/* Alerta Estoque Baixo */
+.alert {
+    border-radius: 10px;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background-color: #e63946; /* Vermelho suave */
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Cartões */
@@ -28,6 +49,7 @@ h1 {
     background-color: #ffffff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-left: 5px solid #007bff; /* Detalhe azul */
+    padding: 20px;
 }
 
 .card:hover {
@@ -38,6 +60,7 @@ h1 {
 .card-title {
     font-size: 1.25rem;
     font-weight: bold;
+    color: #1b4965;
 }
 
 .card-subtitle {
@@ -55,26 +78,68 @@ h1 {
 .btn-primary {
     background-color: #4da8da; /* Azul claro */
     border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-primary:hover {
     background-color: #007bff; /* Azul escuro */
+    color: #ffffff;
 }
 
 .btn-secondary {
     background-color: #6c757d; /* Cinza */
     border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-secondary:hover {
     background-color: #5a6268; /* Cinza mais escuro */
+    color: #ffffff;
 }
 
-/* Alerta Estoque Baixo */
-.alert {
+/* Produto */
+.produto-item {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ddd;
     border-radius: 10px;
-    font-size: 1.1rem;
-    color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.produto-item:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.produto-item .btn {
+    border-radius: 5px;
+}
+
+/* Alinhamento e Ajustes */
+.produto-item .right-column {
+    align-self: flex-start;
+}
+
+.product-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.product-name {
+    margin-bottom: 0;
+    font-weight: bold;
+    color: #1b4965;
+}
+
+.product-id {
+    margin-bottom: 0;
+    font-weight: normal;
+    color: #6c757d;
 }
 
 /* Rodapé */
@@ -83,45 +148,10 @@ footer {
     color: #ffffff;
     font-size: 0.9rem;
     border-top: 5px solid #4da8da; /* Azul claro */
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 30px;
 }
-        .produto-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-            }
-            .produto-item:hover {
-                     transform: scale(1.01);
-                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-                    }
-                    .produto-item .btn {
-                    border-radius: 5px;
-                    transition: background-color 0.3s, color 0.3s;
-                }
-                .container {
-                     margin-top: 30px; 
-                }   
-        .produto-item .right-column {
-            align-self: flex-start; 
-        }
-        .product-header {
-              display: flex;
-              align-items: center;
-             gap: 15px; 
-            }
-
-        .product-name {
-              margin-bottom: 0;
-        }
-
-        .product-id {
-                 margin-bottom: 0;
-                 font-weight: normal;
-}
-
     </style>
 </head>
 <body>
