@@ -15,7 +15,7 @@ def lista_produtos(request):
     
     categorias_ativas = Categoria.objects.filter(ativo=True)
 
-    # Debug - Verificar categorias ativas
+    
     print("Categorias ativas (na view):", categorias_ativas)
 
     # Verificar se há produtos com estoque abaixo do mínimo e que estejam ativos
@@ -37,12 +37,12 @@ def lista_produtos(request):
         # Atualizar o queryset do campo categoria para apenas categorias ativas
         form.fields['categoria'].queryset = categorias_ativas
 
-    # Passar as categorias e a flag `tem_estoque_baixo` para o contexto
+    
     return render(request, 'produtos/lista_produtos.html', {
         'produtos': produtos,
         'form': form,
-        'categorias': categorias_ativas,  # Incluindo as categorias no contexto
-        'tem_estoque_baixo': tem_estoque_baixo  # Para controle da mensagem de aviso
+        'categorias': categorias_ativas,  
+        'tem_estoque_baixo': tem_estoque_baixo  
     })
 # Cadastrar produto
 def cadastrar_produto(request):
@@ -57,13 +57,13 @@ def cadastrar_produto(request):
 
 # Ver produtos com estoque baixo
 def estoque_baixo(request):
-    # Filtrar produtos com quantidade menor do que a quantidade mínima
+    
     produtos = Produto.objects.filter(quantidade__lt=models.F('quantidade_minima'))
     
-    # Obter apenas categorias ativas para serem usadas no formulário de cadastro/procura
+    
     categorias_ativas = Categoria.objects.filter(ativo=True)
 
-    # Renderizar o template principal, passando o queryset dos produtos filtrados
+    
     return render(request, 'produtos/lista_produtos.html', {
         'produtos': produtos,
         'categorias': categorias_ativas,
@@ -81,23 +81,23 @@ def procurar_produto(request):
     incluir_inativos = request.GET.get('incluir_inativos') == 'on'
     incluir_estoque_baixo = request.GET.get('incluir_estoque_baixo') == 'on'
 
-    # Inicia o queryset de produtos
+    
     produtos = Produto.objects.all()
 
-    # Filtra pelo nome, se informado
+    
     if nome:
         produtos = produtos.filter(nome__icontains=nome)
 
-    # Filtra pelo código, se informado
+    
     if codigo:
         produtos = produtos.filter(codigo__icontains=codigo)
 
-    # Filtra pela categoria, se selecionada
+    
     if categoria_id and categoria_id != "Todas":
         produtos = produtos.filter(categoria_id=categoria_id)
 
-    # Filtros combinados
-    query = Q()  # Cria uma query vazia para acumular condições
+   
+    query = Q()  
 
     if incluir_ativos:
         query |= Q(ativo=True)
@@ -114,7 +114,7 @@ def procurar_produto(request):
         produtos = produtos.filter(query)
 
     # Cria uma instância do ProdutoForm e atualiza o queryset das categorias
-    categorias = Categoria.objects.filter(ativo=True)  # Certificar que apenas categorias ativas são exibidas
+    categorias = Categoria.objects.filter(ativo=True)  
     form = ProdutoForm()
     form.fields['categoria'].queryset = categorias
 
@@ -145,7 +145,7 @@ def editar_produto(request, produto_id):
 
     return render(request, 'produtos/editar_produto.html', {
         'form': form,
-        'produto': produto,  # Passa o produto para verificar se está ativo ou não
+        'produto': produto,  
         'categorias': categorias
     })
 
@@ -154,7 +154,7 @@ def gerenciar_categorias(request):
     return render(request, 'produtos/gerenciar_categorias.html', {'categorias': categorias})
 
 def historico_movimentacoes(request):
-    movimentacoes = Movimentacao.objects.all()  # Corrigir para garantir que `movimentacoes` esteja sempre definida.
+    movimentacoes = Movimentacao.objects.all()  
     return render(request, 'produtos/historico_movimentacoes.html', {'movimentacoes': movimentacoes})
 
 # View para gerenciar categorias (cadastrar, editar e excluir)
@@ -223,7 +223,7 @@ def movimentar_produto(request, produto_id):
                 produto=produto
             )
             
-            # Verificar se a quantidade está agora acima da quantidade mínima, para remover o aviso "Estoque Baixo"
+            
             if produto.quantidade >= produto.quantidade_minima:
                 messages.info(request, f'O produto {produto.nome} agora está acima da quantidade mínima.')
 
